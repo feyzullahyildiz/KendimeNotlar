@@ -1,4 +1,5 @@
 ### Eski projemi nasıl create-react-app'e geçirdim. (eject etmeden)
+- Bu sorun create-react-app@3.4.1 versionunda karşılaşılmıştır.
 - npx create-react-app frontend --typescript ile projemi kurdum.
 - .env dosyası oluşturdum `EXTEND_ESLINT=true` ekledim
 - eski projemin kodlarını kopyaladım
