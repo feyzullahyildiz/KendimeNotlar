@@ -1,6 +1,41 @@
 # Kotlin Coroutines
 
 
+### `runBlocking`
+- `runBlocking` herhangi bir fonksiyonda çağrılabilir.
+- başlatıldığı scope farklı thread'de olabilir.
+- alttaki kod örneğinde main thread blocklanmamış oluyor. 
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun log(str: String) {
+    println("(Thread: ${Thread.currentThread().name}) $str")
+}
+
+fun main() {
+    log("main start")
+    val value = runBlocking(Dispatchers.IO) {
+        for (i in 0..3) {
+            Thread.sleep(300)
+            log("sleeping $i")
+        }
+        return@runBlocking 10
+    }
+    log("main end $value")
+}
+
+/*OUTPUT*/
+(Thread: main) main start
+(Thread: DefaultDispatcher-worker-1) sleeping 0
+(Thread: DefaultDispatcher-worker-1) sleeping 1
+(Thread: DefaultDispatcher-worker-1) sleeping 2
+(Thread: DefaultDispatcher-worker-1) sleeping 3
+(Thread: main) main end 10
+
+Process finished with exit code 0
+```
+
 ## Suspend function
 - `suspend` function'ın içerisinde başka bir `suspend` function çağırabilirsiniz.
 - `suspend` fun içerisinde bir `suspend` fun çağırılıyor ise önce onun bitmesini bekliyor.
@@ -94,4 +129,3 @@ fun second() = runBlocking {
 ### `launch` için Notlar
 - `suspend` function'ın içerisine de normal functiona da direk eklenemez. Ya `runBlocking` ya `coroutineScope` yada türevi (belki yoktur) birşeyi koymanız gerekiyor.
 - `suspend` function'a `launch` koyarken `runBlocking` koyarsanız intellij warning veriyor, `coroutineScope` koyunca warning gidiyor. 
-
