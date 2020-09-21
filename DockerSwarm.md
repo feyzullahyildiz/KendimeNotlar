@@ -26,3 +26,36 @@
 
 ## Docker secret
 - Service oluşturuken --secret parametresi ile oluşturduğunuz secret'i veriyorsunuz. Dokcer sizin yerinize bu secret'ın dosyasını volume olarak bind ediyor. (secret dosyasını hostta silerseniz veya değiştirirseniz ne olur bilmiyorum). Path olarak `/run/secrets/${SECRET_NAME}`'e atıyor.
+
+
+## Stacks
+- docker-compose'a ihtiyacınız yok.
+- `docker stack deploy`
+- build yapamıyor galiba
+- docker-compose.yml dosyasına göre farklılıkları var.
+    - version olarak 3 veya üstünü kullanmak tavsiye ediliyor.
+    - servislerin deploy adında yeni bir `property`si var.
+    ```yml
+    version: "3"
+    services: 
+
+        redis:
+            image: redis:alpine
+            ports:
+                - "6379"
+            networks:
+                - frontend
+            deploy:
+                replicas: 2
+                update_config:      // update edilme senaryosu
+                    parallelism: 2  // aynıanda 2 tane
+                    delay: 10s      // 10s aralıklarla
+                restart_policy:
+                    condition: on-failure
+        db:
+        ....
+    ```
+- `docker stack deploy -c example-stack-app.yml exampleapp` stack'i kaldırmak içi çalıştırılır 
+- `docker stack services exampleapp` stack ile alakalı özet bilgi verir
+- `docker stack ps exampleapp` stack ile alakalı detaylı bilgi verir
+- replica sayısını değiştirdikten sonra aynı kodu çalıştırırsanız, kendisi güncellenecektir. `docker stack deploy -c example-stack-app.yml exampleapp`
