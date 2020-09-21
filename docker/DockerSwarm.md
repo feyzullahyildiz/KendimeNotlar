@@ -59,3 +59,5 @@
 - `docker stack services exampleapp` stack ile alakalı özet bilgi verir
 - `docker stack ps exampleapp` stack ile alakalı detaylı bilgi verir
 - replica sayısını değiştirdikten sonra aynı kodu çalıştırırsanız, kendisi güncellenecektir. `docker stack deploy -c example-stack-app.yml exampleapp`
+- Örnek uygulama [swarm-example](./swarm-example/swarm-example.md)
+- Örnek uygulama [container idlerini nginx'e verme işlemi](./swarm-example_nginx_with_env/swarm-example_nginx_with_env.md)
