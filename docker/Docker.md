@@ -1,0 +1,15 @@
+# Docker
+
+
+## Docker bilmiyorsun haberin olsun
+### Binded volume ve Permission durumları ile alakalı bilgi
+- Linuxte `whoami` komutu aktif kullanıcının kim olduğunu verir. `id -u` adında bir komut var. Bu komut aktif kullanıcının `id` değerini veriyor.
+- Her container aktif bir kullanıcı-id ile çalışır. Dolayısıyla containerdaki işlemler bu kullanıcının yetkisi kadardır.
+- Linuxdeki yetki mekanizması kullanıcı adı değil kullanıcıların id değerlerine göre çalışır. 
+- Ubuntuda `useradd` komutu ile oluşturduğunuz ilk kullanıcının `id` değeri genelde `1000` olur ve bir sonraki ise `1001` olur.
+- Bir nodejs containerı varsayılan olarak `node` adında bir kullanıcı ile çalışır. Ve bu kullanıcının `id` değeri `1000` dir.
+- Bir nodejs containerı ile host arasında bir binded volume oluşturalım.
+    - `docker run -v /home/feyzullah/outer_dir:/home/node/inner_dir node`
+    - Burada `feyzullah` kullanıcısının id değeri `1000` 
+    - Hosttaki `feyzullah` kullanıcısı ve containerdaki `node` bu folderda tam yetkiye sahiptir. Çünkü bunlar mantıken aynı kullanıcıdır. 
+    - 
