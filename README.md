@@ -14,3 +14,25 @@ Sorun şu, git pull yaparken nasıl olur da ikinci private-public key'i kullanab
 
 ## Jenkinsfile'da nasıl Environment kullanılır.
 - Jenkinsfile'da credentials fonksiyonunu kullanarak kısmen environment kullanabiliyoruz ama bu değer şifrelenmiş oluyor.
+
+
+## Ubuntu ve Docker'da Network, Sanal Network
+- Ubuntuda nasıl sanal network oluşturulur.
+- Docker default olarak bridge ile sanal network oluşturuyor diye biliyorum. Bridge'in cli'ı var mı.
+- ifconfig nasıl okunur.
+- Subnet nedir ?
+- Gateway nedir ?
+- Route table nedir ?
+- 10.0.0.x 172.24.x.x 192.168 ile başlayan ipler için özel bir durum var mı ?
+- Docker containerlarının ip değerleri neden 172.17.x.x ile ile başlıyor.
+- Bir bilgisayarı iki farklı network'e bağladığımızı düşünelim.
+- Senaryo 1 için: Network A ip: 192.168.1.20, Network B ip: 192.168.1.21
+    - Bu ip değerlerini oluşturmak mümkün mü ?
+    - Ne şartlarda 192.168.1.30'a istek yaptığımızda Network A üzerindeki makineye ulaşırım.
+    - İnternete çıkarken hangi networkten internete çıkarım. Bu networkü nasıl değiştiririm.
+    - Bu networkler sanal olsaydı bir fark olur muydu ? 
+- Senaryo 2 için: Network A ip: 192.168.1.20, Network B ip: 192.168.2.20
+    - Bu makineler kesinlikle birbirini görebilirler mi, ne şartlarda göremezler.
+- Ubuntuya dns server nasıl kurulur, open source dns uygulaması var mı. dns serverlar networkün hangi katmanında çalışıyor, portu var mı ?
+- ufw nasıl çalışıyor, ufw ile bir portu kapattığımız zaman o portu işletim sisteminde bir uygulama dinleyebilir mi ? dinleyebiliyor ise ufw bir proxy server mıdır ?
+- NetworkA içerisinde 4 cihaz bulunmakdadır, NetworkB içerisinde bu 4 cihazla beraber 1 cihaz daha bulunmaktadır, yani 5 cihaz. Bu 4 cihazın ilkine bağlanıp ufw ile 22 portunu kapattım. NetworkB de olup NetworkA da olmayan cihaz ile bu cihaza erişemezken, NetworkA üzerindeki diğer 3 cihaz ile 22 portuna hala erişebilir durumda idim. Neden ? Nasıl ?
