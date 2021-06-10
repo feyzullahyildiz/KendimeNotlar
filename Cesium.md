@@ -10,7 +10,7 @@
     - 2D için yükseklik limiti olmadan o alana giren modeli highlight eder.
     - 3D ama yükseklik değeri olmayan modeller için nasıl çalıştığını bilmiyorum, [bknz.](https://sandcastle.cesium.com/?src=Polygon.html&label=All)
 - Classification için 3D model, küp, kapalı katı bir nesne için Primitive olması gerekiyor, 3D için Entity olamaz. 2D için Entity olabilir.
-    - 2D Entity default classification ile çalışıyor. Default değeri `BOTH`'dur
+    - 2D Entity default classification ile çalışıyor. Default değeri `BOTH`'dur. Ama bir 2D entity'inin `clampToGround` değeri true değil ise classification özelliği çalışmaz. 
     - 3D için `Cesium.ClassificationPrimitive` veya `Cesium.Cesium3DTileset` kullanılmalı. [bknz](https://sandcastle.cesium.com/?src=Classification.html&label=All)
 - `Entity`lerin classificationType değeri vardır. Ama anlaşıldığı üzere 3D bir Entity için classification mümkün değildir. () polygon'un default değeri BOTH şeklindedir. Polygon default 2D bir entity'dir [bknz](https://cesium.com/docs/cesiumjs-ref-doc/PolygonGraphics.html#.ConstructorOptions)
 - `3DTileset` deafult classificationType değeri yoktur, dolayısıyla 4. bir Type olmuş oluyor, dökümantasyonda şuanda 3 tane var. [bknz](https://cesium.com/docs/cesiumjs-ref-doc/global.html#ClassificationType)
