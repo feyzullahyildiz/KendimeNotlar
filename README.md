@@ -5,6 +5,7 @@
 - [kotlin-coroutines](./kotlin-coroutines.md)
 - [ssh](./ssh.md)
 - [Cesium](./Cesium.md)
+- [nginx](./nginx.md)
 
 
 # Kendime Sorularım
