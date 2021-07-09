@@ -3,6 +3,10 @@
 ## Sorularım
 ### Soru 1
 - multipart data upload ediyorum. nginx upload bitmeden yönlendirmesi gereken yere göndermiyor. Nginxte bunu nasıl değiştirebilirim. Sürekli bir veri akışı nasıl yapılır.
+### Çözüm
+- proxy_request_buffering değeri default olarak on; Bunu kapattığımız zaman. İstediğimizi elde etmiş oluyoruz. [stackoverflowda bir soru](https://stackoverflow.com/questions/12282342/nginx-files-upload-streaming-with-proxy-pass) [nginx dökümantasyonu](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering)
+
+- `proxy_request_buffering off;` 
 
 ### Soru 2
 - nginx'e multipart veri upload ederken temp olarak bir path vermek istiyoruz, mesela farklı bir disk. bunu sağlayan ayar için [client_body_temp_path](http://nginx.org/en/docs/http/ngx_http_core_module.html) kullanılıyor. Bunu ayarladığımız zaman error.log file'ına sürekli permission denied hatası düşüyor.
