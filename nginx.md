@@ -18,7 +18,7 @@
     - ```txt
             2021/07/07 16:11:51 [crit] 15994#15994: *6443 open() "/media/cesium/nginx_tmp/8/30/0000000308" failed (13: Permission denied), client: 192.168.20.180, server: _, request: "POST /api/v1/terrain/5/uploadfile HTTP/1.0"
         ```
-### Deneme 1
+### Soru 2 Çözüm Denemesi 1 (Başarısız)
 - [https://stackoverflow.com/q/28273035/7975831](https://stackoverflow.com/q/28273035/7975831)
 - Burada selinux ile bişeyler yapmamız gerektiği yazıyor.
 - Ubuntuya selinux eklemek için bu aşamaları uyguladık. [https://linuxconfig.org/how-to-disable-enable-selinux-on-ubuntu-20-04-focal-fossa-linux](https://linuxconfig.org/how-to-disable-enable-selinux-on-ubuntu-20-04-focal-fossa-linux)
@@ -26,10 +26,10 @@
 sudo apt install policycoreutils selinux-utils selinux-basics
 sudo selinux-activate
 reboot
-#Burada ne var ne yok patladık. Ubuntuya bunu yüklemek sıkıntılı bir durum galiba. System boot olmadı. Gerçi baya bir uyarı vermiş. AppArmor'u kapattığınızdan emin olun falan filan diye. Ama yöntemi sevmedim.
+# Burada ne var ne yok patladık. Ubuntuya bunu yüklemek sıkıntılı bir durum galiba. System boot olmadı. Gerçi baya bir uyarı vermiş. AppArmor'u kapattığınızdan emin olun falan filan diye. Ama yöntemi sevmedim.
 
 ```
-### Deneme 2
+### Soru 2 Çözüm Denemesi 2 (Başarısız)
 - selinux yerine default AppArmor diye birşey varmış.
 - Hali hazırda ubuntu bunun ile beraber geliyormuş.
 - AppArmor üzerinde bişeyler deneyeceğiz.
@@ -38,5 +38,9 @@ reboot
 - Sonrası patladı
 - 
 
-### Deneme 3
+### Soru 2 DeÇözüm Denemesi 3 (Başarısız)
 - stackoverflow üzerine soru açtım. [https://stackoverflow.com/questions/68300720/linux-ubuntu-and-nginx-permissions-on-another-disk-when-i-use-client-body-temp](https://stackoverflow.com/questions/68300720/linux-ubuntu-and-nginx-permissions-on-another-disk-when-i-use-client-body-temp)
+
+### Soru 2 Çözümü (Başarılı)
+- disk'i tekrardan mount etmek gerekiyor.
+- `sudo mount -o remount,rw  /dev/sdb1 /media/cesium`
