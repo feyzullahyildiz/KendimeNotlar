@@ -38,7 +38,7 @@ reboot
 - Sonrası patladı
 - 
 
-### Soru 2 DeÇözüm Denemesi 3 (Başarısız)
+### Soru 2 Çözüm Denemesi 3 (Başarısız)
 - stackoverflow üzerine soru açtım. [https://stackoverflow.com/questions/68300720/linux-ubuntu-and-nginx-permissions-on-another-disk-when-i-use-client-body-temp](https://stackoverflow.com/questions/68300720/linux-ubuntu-and-nginx-permissions-on-another-disk-when-i-use-client-body-temp)
 
 ### Soru 2 Çözümü (Başarılı)
