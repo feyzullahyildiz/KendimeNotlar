@@ -1,5 +1,38 @@
 # Nginx
 
+## Frontend ve Nginx Build İşlemleri
+### React Router basename ile nginx configurasyonu nasıl yapılmalı
+- create-react-app kullanıyoruz, server side rendering kullanmıyoruz. 
+- react-router-dom kullanıyoruz. projenin `/panel` şeklinde çalışmasını istiyoruz.
+- react-router kendi içinde nested routerı var ve bu durumlarda da sayfa yenilemelerinde çalışmaya devam etmesini, 404 hatasını almamak istiyoruz.
+### Çözüm 
+- [Buradaki](https://create-react-app.dev/docs/deployment) dökümanı okumanız iyi olacaktır.
+- 404 hatası için nginx configurasyonu ile alakalı bilgi [burada](https://www.learninjava.com/react-router-apache-nginx-tomcat/)
+- `package.json` dosyasına `homepage` adına bir key eklemeli ve değerini `/panel` yapmalıyız.
+- `react-router-dom` için configurasyon aşağıdaki gibi olmalı.
+    - ```tsx
+        <BrowserRouter basename="/panel">
+            <Link to="/today"/> // renders <a href="/panel/today">
+            <Link to="/tomorrow"/> // renders <a href="/panel/tomorrow">
+            ...
+        </BrowserRouter>
+    ```
+- Projeyi build etmeliyiz. `yarn build` veya `npm run build` yazarak.
+- build için `panel` adında bir klasör oluşturmalıyız. `build` klasörünü (index.html'in bulunduğu klasörü) `panel` klasörüne atmalıyız. 
+- path olarak bu şekilde olmalı `/var/www/html/panel/index.html` ve `/var/www/html/` path'i serve edilmeli. 
+    - ```
+        server {
+            ...
+            location /panel {
+                root /var/www/html/;
+                index  index.html index.htm;
+                try_files $uri $uri/ /panel/index.html;
+            }
+        }
+
+    ```
+
+
 ## Sorularım
 ### Soru 1
 - multipart data upload ediyorum. nginx upload bitmeden yönlendirmesi gereken yere göndermiyor. Nginxte bunu nasıl değiştirebilirim. Sürekli bir veri akışı nasıl yapılır.
@@ -48,3 +81,6 @@ reboot
 ### Soru 2 Çözümü (Başarılı)
 - disk'i tekrardan mount etmek gerekiyor.
 - `sudo mount -o remount,rw  /dev/sdb1 /media/cesium`
+
+
+### Soru 3
