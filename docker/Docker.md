@@ -1,5 +1,7 @@
 # Docker
 
+## Image build ve volume oluşturma
+- Dockerfile içinde oluşturduğun Volume pathleri için image'a localindeki volume dosyalarının gitmesini istemiyorsan volume'e koydunğun dosyaların pathleri .dockerignore dosyasında da da olması gerekiyor.
 
 ## Docker bilmiyorsun haberin olsun
 ### Binded volume ve Permission durumları ile alakalı bilgi
