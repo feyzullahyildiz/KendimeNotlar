@@ -1,5 +1,6 @@
 # Kendime Notlar
 - [Docker](./docker/Docker.md)
+- [Postgres](./postgres/README.md)
 - [DockerSwarm](./docker/DockerSwarm.md)
 - [create-react-app](./create-react-app.md) ile alakalı notlarım
 - [kotlin-coroutines](./kotlin-coroutines.md)
