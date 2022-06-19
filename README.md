@@ -11,7 +11,7 @@
 
 
 # Kendime Sorularım
-
+## robot.txt nedir ?
 
 ## ssh-keygen ve git'i ssh ile kullanma
 - github-gitlab gibi git serverlarından private repolardan şifresiz bir şekilde git pull, git clone yapabilmek için ssh-keygen ile private ve public key oluşturuyoruz. Public key'i github'a ekledikten sonra git pull yapabiliyoruz. Githubda bir public key'i iki farklı repoda kullanamıyoruz, github izin vermiyor. Dolayısıyla ikinci bir private-public key oluşturmamız gerekiyor. ssh-keygen ile key oluştururken dosya adı verebiliyoruz dolayısıyla rahatlıkla birden fazla key oluşturabiliyoruz.
