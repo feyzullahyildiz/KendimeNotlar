@@ -9,6 +9,9 @@
 - [nginx](./nginx.md)
     - Nginx, React, react-router-dom konfigurasyonu
 
+## Servisler
+- Bir backend içinde file upload virusleri nasıl tespit edersiniz ve engellersiniz...
+    - [clamav](https://www.clamav.net/) diye bir open-source anti-virus uygulaması var. Bunun rest servislerini de oluşturmuşlar
 
 # Kendime Sorularım
 ## robots.txt nedir ?
