@@ -6,7 +6,7 @@
 - [kotlin-coroutines](./kotlin-coroutines.md)
 - [ssh](./ssh.md)
 - [Cesium](./Cesium.md)
-- [Mongodb](./mongodb.md)
+- [Mongodb](./mongodb/README.md)
 - [nginx](./nginx.md)
     - Nginx, React, react-router-dom konfigurasyonu
 
