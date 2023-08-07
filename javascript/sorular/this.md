@@ -1,4 +1,5 @@
-# This ile alakalı
+### [<- geri](../README.md) 
+# This ile alakalı (ÇÖZÜLDÜ)
 
 Aşağıdaki kod bloğunda neden this hatası alıyoruz. (Tekrardan bind edersek çalışıyor)
 
@@ -25,9 +26,17 @@ const Provider = {
         }
         console.log('start _initInterval', this);
         this._getTokenAndEmitEvent();
+
+
         // Bu satır nasıl oluyorsa this'i değiştiriyor
         // I DUNNO WHYYYY
         this._intervalID = setInterval(this._getTokenAndEmitEvent, 10 * 1000)
+
+        // CEVAP OLARAK: Bu şekilde olmalıydı. Burada setInterval'e function'ı veriyoruz.
+        // Ama function'ı o çağırıyor ve burada this'i değiştiren o diyebiliriz.
+        // Kodu aşağıdaki gibi değiştirisek closure oluşuyor (BENCE), o yüzden this istedimiz gibi kalıyor.
+        // this._intervalID = setInterval(() => this._getTokenAndEmitEvent(), 10 * 1000)
+
     },
     _stopInterval: function () {
         console.log('start _stopInterval')

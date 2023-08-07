@@ -5,7 +5,7 @@
 - [create-react-app](./create-react-app.md) ile alakalı notlarım
 - [kotlin-coroutines](./kotlin-coroutines.md)
 - [ssh](./ssh.md)
-- [javascript](./javascript.md)
+- [javascript](./javascript/README.md)
 - [css](./css/README.md)
 - [Cesium](./Cesium.md)
 - [Mongodb](./mongodb/README.md)
