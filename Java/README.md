@@ -4,6 +4,7 @@
 - Javanın native kütüphanelerini kullanmayı öğrenmem lazım.
 - String'in implicit tip olduğunu hatırlıyorum. Eskiden kıyaslarken String.equals(string str) gibi bir method kullanlıyordu, hala böyle mi. Bi yerde 2 eşit kullanabiliyor gibi görmüştüm. Bu olay JDK veriyonları arasında breaking changes olarak mı geçti acaba ??
 - JDK, SDK nedir, farkları nelerdir
+- DSL diye bir syntax gibi bişey var. `build.gradle`, `setings.gradle` dosyaları için DSL diyebiliriz ve populer olanı Groovy
 
 ## SDKMAN kurulumu, kullanımı
 - https://sdkman.io/install
@@ -37,3 +38,256 @@
 
 ## Gradle'la da bakalım birazcık
 - `gradle init` (bunu başka projede deniyorum)
+```
+Select type of project to generate:
+  1: basic
+  2: application
+  3: library
+  4: Gradle plugin
+Enter selection (default: basic) [1..4] 1
+
+Select build script DSL:
+  1: Kotlin
+  2: Groovy
+Enter selection (default: Kotlin) [1..2] 2
+
+Project name (default: learning-java):
+Generate build using new APIs and behavior (some features may change in the next minor release)? (default: no) [yes, no] no
+
+> Task :init
+To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.5/samples
+
+BUILD SUCCESSFUL in 9s
+2 actionable tasks: 2 executed
+```
+- Mümkün olduğunca en basic halini seçtim ve beklediğimden daha fazla dosya oluşmuş oldu.
+- Dosyalar şöyle
+- `gradlew` ve `gradlew.bat`
+    - `gradlew` bir bash script. `gradlew.bat` ise aynısının windows friendly hali
+- `settings.gradle` ve `build.gradle` DSL script ile hazırlanmış. Ne için kullanılıyor tam olarak hakim değilim.
+- `gradle/wrapper/gradle-wrapper.jar` yaklaşık 43KB olan bir dosyamız. Defualt olarak `.gitignore`'a eklenmemiş.
+
+### Gradle ile basic console app deneyelim.
+- `gradle init`
+```
+Select type of project to generate:
+  1: basic
+  2: application
+  3: library
+  4: Gradle plugin
+Enter selection (default: basic) [1..4] 2
+
+Select implementation language:
+  1: C++
+  2: Groovy
+  3: Java
+  4: Kotlin
+  5: Scala
+  6: Swift
+Enter selection (default: Java) [1..6] 3
+
+Generate multiple subprojects for application? (default: no) [yes, no] no
+Select build script DSL:
+  1: Kotlin
+  2: Groovy
+Enter selection (default: Kotlin) [1..2] 2
+
+Select test framework:
+  1: JUnit 4
+  2: TestNG
+  3: Spock
+  4: JUnit Jupiter
+Enter selection (default: JUnit Jupiter) [1..4] 1
+
+Project name (default: learning-java):
+Source package (default: learning.java):     
+Enter target version of Java (min. 7) (default: 21):
+Generate build using new APIs and behavior (some features may change in the next minor release)? (default: no) [yes, no] no
+
+> Task :init
+To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.5/samples/sample_building_java_applications.html
+
+BUILD SUCCESSFUL in 1m 19s
+2 actionable tasks: 2 executed
+
+```
+- Bu şekilde run edebileceğimiz komutlar var.
+- run etmek için
+    - `./gradlew run`
+- tasklar var örnek kodlarımız
+    - `./gradlew tasks`
+    - `./gradlew tasks --all`
+- test build
+    - `./gradlew build`
+    - `./gradlew jar`
+    - `./gradlew help --task build`
+- test için
+    - `./gradlew test`
+    - `./gradlew help --task test`
+
+
+### Ufak derin bilgilerden
+- `CWD` ve `./gradlew run` ilişkisi
+  - file formatlarıyla falan çalışmamız gerektiği durumlarda CWD kullanmamız gerekir. Java en nihayetinde compile oluyor ve single file'a dönüyor. nodejs'de `__dirname` ve `__filename` gibi değişkenleri kullanabiliyorduk ama burada pek mantıklı değil gibi duruyor.
+  - CWD için JAVA'da kullanılan kod şöyle
+    - `String cwd = System.getProperty("user.dir");`
+  - gradle ile run ettiğimizde CWD değeri farklı geliyor. Çünkü gradle, projeyi build ettikten sonra `app` dizine gidiyor ve projeyi orada run ediyor.
+  - nasıl test ederiz peki
+  - `./gradlew build` yada `./gradlew jar`
+  - `java -jar ./app/build/libs/app.jar`
+    - muhtemelen şu şekilde hata alacağız. 
+    - `no main manifest attribute, in ./app/build/libs/app.jar`
+  - Bunun çözümü için, `build.gradle`'a jar için `Main-Class` propertisini girmek gerekiyor.
+  ```groovy
+  jar {
+      manifest {
+          attributes(
+              'Main-Class': 'learning.java.App'
+          )
+      }
+  }
+  // ....
+  // YADA application scope'undan okuyabiliriz.
+  // ....
+  application {
+    mainClass = 'learning.java.App'
+  }
+  jar {
+      manifest {
+          attributes(
+              'Main-Class': application.mainClass
+          )
+      }
+  }
+  ```
+  - Sonrasında aşağıdaki kod çalışmalı ve CWD değerini düzgün bir şekilde alabilmeliyiz...
+  - `java -jar ./app/build/libs/app.jar`
+  - Eğer ki gradle'da bunun düzgün bir çözümü yok ise ve Maven bunu düzgün bir şekilde hallediyorsa. Gradle NET ÇÖPTÜR diyebiliriz :D
+
+
+## ARGS Okuma
+## File Okuma ve Yazma
+```java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+public class App {
+
+    public void readFile() {
+        String cwd = System.getProperty("user.dir");
+        String fileName = "input.txt";
+        Path filePath = Paths.get(cwd, fileName);
+        System.out.println("File Path: " + filePath.toString());
+        try {
+            String fileContent = Files.readString(filePath);
+            System.out.println("FileContent: " + fileContent);
+            // Create file if not exists
+            Path outputFilePath = Paths.get(cwd, "output.txt");
+            if (!Files.exists(outputFilePath)) {
+                Files.createFile(outputFilePath);
+            }
+            // Set text of file like this...
+            Files.writeString(outputFilePath, "output file content 1");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        new App().readFile();
+    }
+}
+// KODU şu şekilde çalıştırabilirsiniz. Bulunduğunuz path'e input.txt dosyası ekleyiniz
+// ./gradlew build && java -jar ./app/build/libs/app.jar 
+```
+## Library ekleme ve Build işlemi
+- **BURADA HENÜZ ÇÖZEMEDİĞİMİZ BİR HATA VAR**
+- Build ettiğinde kütüphaneleri bulamıyor, hata alıyoruz. Developmentta çalışıyor. Bunun sebebini öğrenmemiz lazım. `Öğrenemedik`.
+- build.gradle'ımız şu şekilde.
+```groovy
+dependencies {
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+}
+```
+- JSON file okuyup Gson ile parse edit console'a basmak istiyoruz.
+```java
+package learning.java;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import com.google.gson.Gson;
+
+public class App {
+    public static class User {
+        public int id;
+        public String name;
+        public String surname;
+    }
+    public void readFromJson() {
+        String cwd = System.getProperty("user.dir");
+        var jsonFilePath = Paths.get(cwd, "example.json");
+        try {
+            var jsonContent = Files.readString(jsonFilePath);
+            System.out.println(String.format("jsonContent: %s", jsonContent));
+            var gson = new Gson();
+            var user = gson.fromJson(jsonContent, User.class);
+            System.out.println(String.format("USER ID: %d", user.id));
+            System.out.println(String.format("USER NAME: %s", user.name));
+            System.out.println(String.format("USER SURNAME: %s", user.surname));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void main(String... argv) {
+        new App().readFromJson();
+    }
+}
+``` 
+- CWD ile alakalı sorun yaşıyorduk ve hala yaşıyoruz.
+- Örnekteki koda göre projenin ana dizini için bu path'i varsayalım --> `~`
+```json
+// ~/app/example.json       // ./gradlew CWD olarak hep app'in içinde.
+// ~/example.json           // build edildikten sonra .jar file CWD'yi düzgün gördüğü için bunu kullanıyor
+{
+  "id": 151,
+  "name": "ALİ",
+  "surname": "Duru"
+}
+```
+- `./gradlew run`'ı çalıştırıyorum ve kod çalışıyor.
+```
+USER ID: 151
+USER NAME: ALİ
+USER SURNAME: Duru
+```
+- Ama bu çalışmıyor.
+- `./gradlew build && java -jar ./app/build/libs/app.jar`
+```
+
+BUILD SUCCESSFUL in 1s
+7 actionable tasks: 6 executed, 1 up-to-date
+jsonContent: {
+  "id": 151,       
+  "name": "ALİ",   
+  "surname": "Duru"
+}
+
+Exception in thread "main" java.lang.NoClassDefFoundError: com/google/gson/Gson
+        at learning.java.App.readFromJson(App.java:71)
+        at learning.java.App.main(App.java:88)
+Caused by: java.lang.ClassNotFoundException: com.google.gson.Gson
+        at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+        at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+        ... 2 more
+```
+
+## ENV okuma
