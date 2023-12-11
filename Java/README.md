@@ -364,3 +364,14 @@ Caused by: java.lang.ClassNotFoundException: com.google.gson.Gson
 ### Maven ile Kütüphane ekleme
 - Hala build alından dosyadan kütüphane'ye erişemiyorduk. FAT JAR hazırlamayı öğrendik, yukarıyı oku.
 - Gradle'da oluğu gibi
+
+### Fat olmayan JAR file run ederken potansiyel hata
+```sh
+# Execute jar file with multiple classpath libraries from command prompt
+# https://stackoverflow.com/a/25156085/7975831
+# Using java 1.7, on UNIX -
+# on UNIX
+java -cp myjar.jar:lib/*:. mypackage.MyClass
+# On Windows you need to use ';' instead of ':' -
+java -cp myjar.jar;lib/*;. mypackage.MyClass
+```
