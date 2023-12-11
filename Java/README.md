@@ -291,3 +291,76 @@ Caused by: java.lang.ClassNotFoundException: com.google.gson.Gson
 ```
 
 ## ENV okuma
+
+# FAT JAR kavramı ve .jar dosyasını execute işlemi
+- Dependency'leri de içeriyorsa buna `FAT JAR` diyorlar.
+- Bu konu ciddi bir konu. Dependency kullandığımızda build ettiğimiz app'i run ettiğimizde patlıyoruz. Development'ta çalışmasına rağmen build (.jar dosyası) dependency'ileri bulamıyor. 
+- Benim anladığım, dependency'i import etmek için 2 yöntem var. Birisini `maven` developmentta iken kendisi handle ediyor ve `~/.m2` folderından import ediyor. Compile ederken `javac`'ı dependenciler için kullanmıyor olabilir, sadece yazdığımız kod için kullanıyordur muhtemelen. Ama compile edilmiş kod'u run ederken birden fazla .jar dosyası verebiliyor (Böyle çok kod gördüm Örnek: `java -cp lib\*.jar;. myproject.MainClass`). Bu yönteme fat jar Demiyoruz. Çünkü hepsi ayrı ayrı jar dosyaları. Ve henüz bunun nasıl yapıldığını bilmiyorum. Bir şekilde depend olan kütüphanenin jar dosyalarını target'ın içine kopyalayabilirsem olurdu ama henüz öğrenemedim :)
+- Peki `FAT JAR` nasıl yapılıyor. Bu zıkkım için de plugin işine girmemiz gerekiyor. Pluginimizin adı; `maven-assembly-plugin`
+- ```xml
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+        <archive>
+            <manifest>
+            <mainClass>com.mycompany.app.App</mainClass>
+            </manifest>
+        </archive>
+        <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+        </configuration>
+    </plugin>
+  ```
+- `mvn clean compile assembly:single` yazıyoruz. İsmi, `mvn package`'ı run ettiğimizden daha farklı bir .jar dosyası çıkartıyor. Kıysalamak için `mvn clean package assemly:single`'ı run edebilirsiniz.
+- `my-app-1.0-SNAPSHOT.jar` (5KB)
+- `my-app-1.0-SNAPSHOT-jar-with-dependencies.jar` (278KB)
+- İşin güzel tarafından biri de, bu jar dosyasının mainClass'ı tanımlamış oluyor. Direk şu şekilde çalıştırabiliyoruz.
+- `java -jar my-app-1.0-SNAPSHOT-jar-with-dependencies.jar`
+- [maven-01/pom.xml için buraya tıklayınız](./proje/maven-01/pom.xml)
+- [maven-01/Dockerfile için buraya tıklayınız](./proje/maven-01/Dockerfile)
+# Maven ile devam ediyoruz...
+### genel start ve compiler versiyon sorun çözümü
+- sdk install maven
+- mvn --version
+- mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
+- YADA mvn archetype:generate yazıyoruz. Runtime'da soruyor...
+- cd my-app
+- mvn package
+    - Burada hata veriyor. 
+    - [ERROR] Source option 7 is no longer supported. Use 8 or later.
+    - pom.xml içindeki şu değerleri 1.8 yapmak gerekiyormuş galiba, sonrasında çalıştı. Eski değeri 1.7 idi.
+    - ```xml
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        ```
+- sonrasında `target/my-app-1.0-SNAPSHOT.jar` dosya çıkıyor.
+- Bu isim pom.xml'de var. version ve artifactId'ye bakıyor
+- `java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App`
+### maven genel kodlar
+- `mvn install`
+- `mvn clean install`
+- `mvn package`
+- `mvn exec:java -Dexec.mainClass="com.mycompany.app.App"`
+- Build sonrası execute
+- `java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App`
+### Default mainClass'ı pom.xml'de tanımlamak
+- Bu satırı ekliyoruz. Bu sayede default mainClass'ı belirlemiş oluyoruz. Bu string değeri jar dosyasının içine yazılmıyor diye anlıyorum. build edilmiş jar dosyasını run ederken gene de bu veriyi vermemiz gerekiyor
+```xml
+<!-- https://stackoverflow.com/a/2472767/7975831 -->
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>1.4.0</version>
+    <configuration>
+    <mainClass>com.mycompany.app.App</mainClass>
+    </configuration>
+</plugin>
+```
+- `mvn exec:java` artık çalışır hale gelmiş oldu.
+
+### Maven ile Kütüphane ekleme
+- Hala build alından dosyadan kütüphane'ye erişemiyorduk. FAT JAR hazırlamayı öğrendik, yukarıyı oku.
+- Gradle'da oluğu gibi
