@@ -1,4 +1,7 @@
-# Java öğrenmeye başladık (IDE bağımlılığı olmadan)
+### [<- GERİ](../README.md)
+# Alt Başlıklar
+- [Spring Boot, IoC, Shell etc.](./spring-boot/README.md)
+## Java öğrenmeye başladık (IDE bağımlılığı olmadan)
 
 - gradle ve maven'ı belirli seviyelerde öğrenmem lazım.
 - sdkman diye birşey var. JDK versiyonları arasında geçiş yapabiliyoruz. Native windows support'u yok. WSL ile kullanabiliriz.
