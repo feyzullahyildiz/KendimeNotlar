@@ -13,6 +13,8 @@
 - [Mongodb](./mongodb/README.md)
 - [Git](./git/README.md)
 - [nginx](./nginx.md)
+- [WSL](./WSL.md)
+- [NextJS Notlarım](./NextJS.md)
     - Nginx, React, react-router-dom konfigurasyonu
 
 ## Servisler
