@@ -132,3 +132,12 @@ export default function Error({
 
 ### head.tsx
 Bulunduğu path'in en derinindeki head.tsx çalışır. Parent klasörlerdeki head.tsx çalışmaz.
+
+
+# Extra Notlarım
+- app/lib
+  - Contains functions used in your application, such as reusable utility functions and data fetching functions.
+- app/ui
+  - componentler içinmiş
+  - `global.css` gibi dosyaları da buraya koyuyorlar
+- /scripts: Contains a seeding script that you'll use to populate your database in a later chapte
