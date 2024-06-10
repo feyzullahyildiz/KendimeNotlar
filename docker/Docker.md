@@ -1,5 +1,16 @@
 # Docker
 
+```sh
+# docker-compose yerine docker compose kullanabiliyoruz bu şekilde.
+# loadingler falan daha güzel gözüküyor
+
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+
+# Bana ilginç geldi ama emin değilim. compose.yaml dosyasına direk bakıyor. docker-compose.yaml olmasına gerek yok galiba. Belki bu durum sadece bu plugine özeldir.
+
+```
+
 ## Image build ve volume oluşturma
 - Dockerfile içinde oluşturduğun Volume pathleri için image'a localindeki volume dosyalarının gitmesini istemiyorsan volume'e koydunğun dosyaların pathleri .dockerignore dosyasında da da olması gerekiyor.
 

@@ -16,6 +16,7 @@
 - [WSL](./WSL.md)
 - [NextJS Notlarım](./NextJS.md)
     - Nginx, React, react-router-dom konfigurasyonu
+- [Mail Server docker-mailserver (Henüz kuramadık 😂)](./linux/mail-server.md)
 
 ## Servisler
 - Bir backend içinde file upload virusleri nasıl tespit edersiniz ve engellersiniz...
