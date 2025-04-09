@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: keycloak-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    ports:
+      - "127.0.0.1:5432:5432"
+    networks:
+      - keycloak-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: mykeycloak
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASS}
+    command: start --db=postgres --features=token-exchange --db-url=jdbc:postgresql://postgres:5432/${POSTGRESQL_DB} --db-username=${POSTGRESQL_USER} --db-password=${POSTGRESQL_PASS} --hostname=${KEYCLOAK_HOSTNAME} --http-enabled=true
+    depends_on:
+      - postgres
+    ports:
+      - "${PORT_KEYCLOAK}:8080"
+    restart: always
+    networks:
+      - keycloak-network
+
+networks:
+  keycloak-network:
+    external: true
