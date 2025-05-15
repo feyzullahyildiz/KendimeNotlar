@@ -36,7 +36,9 @@ systemctl start fail2ban
 
 echo "[4/5] SSH servisi yeniden başlatılıyor..."
 
-systemctl restart sshd
+# Ubuntunun bazı vesiyonlarıda ssh servisi sshd olarak gözükür
+# systemctl restart sshd
+systemctl restart ssh
 
 echo "[5/5] Bilgilendirici README.txt dosyası oluşturuluyor..."
 
