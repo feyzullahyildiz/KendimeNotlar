@@ -1,4 +1,84 @@
 # SSH
+### VPS içinde ssh portunu değiştirmek
+
+```sh
+
+#!/bin/bash
+
+set -e
+
+NEW_SSH_PORT=2222  # Yeni SSH portunu burada değiştir
+README_FILE="README.txt"
+
+echo "[1/5] SSH portunu $NEW_SSH_PORT olarak ayarlıyoruz..."
+
+# SSH yapılandırmasını yedekle
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
+# Port numarasını değiştir
+sed -i "s/^#Port .*/Port $NEW_SSH_PORT/" /etc/ssh/sshd_config
+sed -i "s/^Port .*/Port $NEW_SSH_PORT/" /etc/ssh/sshd_config
+
+echo "[2/5] UFW ile güvenlik duvarı yapılandırılıyor..."
+
+# UFW aktif değilse etkinleştir
+ufw allow "$NEW_SSH_PORT"/tcp
+ufw delete allow 22/tcp || true
+ufw enable
+
+echo "[3/5] fail2ban kuruluyor ve başlatılıyor..."
+
+apt update
+apt install -y fail2ban
+
+systemctl enable fail2ban
+systemctl start fail2ban
+
+echo "[4/5] SSH servisi yeniden başlatılıyor..."
+
+systemctl restart sshd
+
+echo "[5/5] Bilgilendirici README.txt dosyası oluşturuluyor..."
+
+cat > "$README_FILE" <<EOF
+Server Güvenlik Yapılandırması
+==============================
+
+SSH Portu:
+----------
+SSH artık $NEW_SSH_PORT portu üzerinden çalışmaktadır.
+Bağlanmak için:
+  ssh -p $NEW_SSH_PORT kullanıcı_adı@sunucu_ip
+
+Fail2Ban:
+---------
+Kaba kuvvet saldırılarına karşı koruma etkin.
+Loglar:
+  sudo fail2ban-client status
+  sudo fail2ban-client status sshd
+
+SSH Giriş Denemeleri:
+---------------------
+Son denemeleri görmek için:
+  sudo journalctl -u ssh -n 50
+  sudo lastb
+  sudo grep "Failed password" /var/log/auth.log
+
+Firewall (UFW):
+---------------
+Açık portları görmek için:
+  sudo ufw status numbered
+
+Yedek Dosya:
+------------
+SSH ayarlarının yedeği: /etc/ssh/sshd_config.bak
+
+EOF
+
+echo "Kurulum tamamlandı. Detaylar '$README_FILE' dosyasında."
+
+
+```
 
 ### Private Public key ile bağlanma
 - İşlerin hepsi bağlanmak istediğiniz makineden yapılıyor, sadece ssh ile bağlanabildiğinizden emin olmanız gerekiyor.
